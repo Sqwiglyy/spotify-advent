@@ -1,0 +1,41 @@
+name: Deploy calendar to GitHub Pages
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Connect the Worker
+        env:
+          WORKER_URL: ${{ vars.WORKER_URL }}
+        run: |
+          node <<'JS'
+          const fs = require('node:fs');
+          const url = new URL(process.env.WORKER_URL);
+          if (url.protocol !== 'https:' || url.pathname !== '/' || url.search || url.hash || url.username || url.password) {
+            throw new Error('Set WORKER_URL to the HTTPS origin of your deployed Worker.');
+          }
+          fs.writeFileSync('public/config.js', 'window.MIXTAPE_WORKER_URL = ' + JSON.stringify(url.origin) + ';\n');
+          JS
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: public
+      - uses: actions/deploy-pages@v4
+        id: deploy

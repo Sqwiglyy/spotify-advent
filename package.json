@@ -1,0 +1,15 @@
+{
+  "name": "spotify-advent-pages",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler d1 migrations apply DB --remote && wrangler deploy"
+  },
+  "devDependencies": { "wrangler": "^4.0.0" },
+  "cloudflare": {
+    "bindings": {
+      "PAGES_ORIGIN": {
+        "description": "Your GitHub Pages origin, for example https://sqwiglyy.github.io, without a repository path."
+      }
+    }
+  }
+}

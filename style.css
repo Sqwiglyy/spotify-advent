@@ -1,0 +1,22 @@
+:root{color-scheme:dark;background:#15181b;color:#f6efdc;font:17px system-ui,sans-serif;--green:#baf48a;--line:#424847;--muted:#b7bfba}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:radial-gradient(ellipse at top right,#263c34,transparent 65%);min-height:100vh}
+main{width:min(960px,calc(100% - 2rem));margin:auto;padding:2rem 0 4rem}header{padding-bottom:2rem;border-bottom:1px solid var(--line)}
+.brand{font-size:.78rem;letter-spacing:.2em;font-weight:700;text-decoration:none}
+h1,h2,p{margin:0}h1{font:normal clamp(3rem,10vw,7rem)/.92 Georgia,serif;letter-spacing:-.06em;margin:2.4rem 0 1rem}h1 em{color:var(--green);font-weight:normal}h2{font:normal 1.75rem Georgia,serif}
+.intro{color:var(--muted);margin-bottom:2rem;max-width:45ch}
+a{color:var(--green)}button,input{font:inherit}button{cursor:pointer;border:0;border-radius:7px;padding:.7rem 1rem;background:var(--green);color:#172019;font-weight:650}button:disabled{cursor:default;opacity:.52}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.choices,#tracks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.panel{background:#1b2423;border:1px solid var(--line);border-radius:12px;padding:1.3rem}.panel p,.panel label{display:block;color:var(--muted);margin:.65rem 0}
+.join-row,.actions,.dialog-top{display:flex;gap:.8rem;align-items:center}.dialog-top{justify-content:space-between}.actions{flex-wrap:wrap;margin-top:1.3rem}
+input{min-width:0;width:100%;padding:.65rem .7rem;border:1px solid #697571;background:#121a18;border-radius:6px;color:inherit}
+#code{text-transform:uppercase}#tracks input{margin-top:.35rem}#tracks label{color:var(--muted)}
+#doors{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.7rem}
+.door{display:grid;place-content:center;gap:.2rem;aspect-ratio:1.18;background:#cae6a4;color:#172019}.door:nth-child(3n){background:#f0c4a7}.door:nth-child(4n){background:#b7c7f6}
+.door strong{font:2rem Georgia,serif}.door small{font-size:.68rem}
+.share-code{font:clamp(2rem,8vw,4rem) monospace;letter-spacing:.14em;color:var(--green)}
+#status,#track-status{margin-top:.9rem;color:#f0c4a7}#status:empty,#track-status:empty{display:none}
+dialog{width:min(460px,calc(100% - 2rem));padding:1.25rem;color:inherit;background:#1b2423;border:1px solid var(--line);border-radius:14px}dialog::backdrop{background:#050907d9}
+#track-link{display:grid;gap:.7rem;margin-top:1rem;text-decoration:none}#art{width:100%;height:auto;border-radius:6px}#song{font-size:1.25rem;color:#f6efdc}.spotify{text-decoration:underline}
+@media(max-width:560px){.choices,#tracks{grid-template-columns:1fr}#doors{grid-template-columns:repeat(4,minmax(0,1fr));gap:.45rem}.door strong{font-size:1.65rem}}
