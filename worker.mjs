@@ -103,7 +103,37 @@ async function spotifyDetails(url) {
   }
 }
 
+async function reportCalendarCount(env) {
+  if (!env.DISCORD_WEBHOOK_URL) return;
+  const row = await env.DB.prepare('SELECT COUNT(*) AS total FROM calendars').first();
+  const total = Number(row.total);
+  const previous = await env.DB.prepare('SELECT last_count FROM calendar_monitor WHERE id = 1').first();
+  if (!previous) {
+    await env.DB.prepare('INSERT INTO calendar_monitor (id, last_count) VALUES (1, ?) ON CONFLICT(id) DO NOTHING').bind(total).run();
+    return;
+  }
+  const lastCount = Number(previous.last_count);
+  if (total === lastCount) return;
+  const change = total - lastCount;
+  const webhook = new URL(env.DISCORD_WEBHOOK_URL);
+  webhook.searchParams.set('wait', 'true');
+  const response = await fetch(webhook, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      content: '🎵 Spotify advent calendars created: **' + total + '** (' + (change > 0 ? '+' : '') + change + ' since the last update).',
+      allowed_mentions: { parse: [] }
+    }),
+    signal: AbortSignal.timeout(15000)
+  });
+  if (!response.ok) throw new Error('Discord calendar count delivery failed: ' + response.status);
+  await env.DB.prepare('UPDATE calendar_monitor SET last_count = ? WHERE id = 1').bind(total).run();
+}
+
 export default {
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(reportCalendarCount(env));
+  },
   async fetch(request, env) {
     const path = new URL(request.url).pathname;
     if (!path.startsWith('/api/')) return env.ASSETS.fetch(request);
