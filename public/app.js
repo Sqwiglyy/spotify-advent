@@ -23,7 +23,7 @@ function rememberDoor(code, day) {
   } catch {
     // The calendar remains usable if browser storage is unavailable.
   }
-  byId('finale').hidden = opened.size < 24;
+  if (opened.size === 24) byId('finale').hidden = false;
 }
 
 function show(section) {
@@ -111,9 +111,9 @@ byId('join').addEventListener('submit', event => {
   if (codePattern.test(code)) join(code);
 });
 
-function renderCalendar({ code, title, year, available }) {
+function renderCalendar({ code, title, year, available, preview }) {
   byId('calendar-heading').textContent = title;
-  byId('finale').hidden = available < 24 || openedDoors(code).size < 24;
+  byId('finale').hidden = !preview && (available < 24 || openedDoors(code).size < 24);
   byId('save-playlist').onclick = () => connectSpotify(code, byId('playlist-status'));
   byId('calendar-info').textContent = year + ' · Doors unlock at midnight London time.';
   const doors = Array.from({ length: 24 }, (_, index) => {
