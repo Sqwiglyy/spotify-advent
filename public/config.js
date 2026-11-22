@@ -1,1 +1,2 @@
 window.MIXTAPE_WORKER_URL = '';
+window.MIXTAPE_SPOTIFY_CLIENT_ID = '';

@@ -1,3 +1,4 @@
+import { connectSpotify, finishSpotify } from './spotify.js';
 const byId = id => document.getElementById(id);
 const status = byId('status');
 const workerUrl = window.MIXTAPE_WORKER_URL || '';
@@ -7,6 +8,23 @@ const trackPattern = /^https:\/\/open\.spotify\.com\/(?:intl-[a-z-]+\/)?track\/[
 const sections = ['home', 'creator', 'shared', 'calendar'];
 let doorRequest;
 let refreshTimer;
+function openedDoors(code) {
+  try {
+    return new Set(JSON.parse(localStorage.getItem('mixtape-opened-' + code) || '[]'));
+  } catch {
+    return new Set();
+  }
+}
+function rememberDoor(code, day) {
+  const opened = openedDoors(code);
+  opened.add(day);
+  try {
+    localStorage.setItem('mixtape-opened-' + code, JSON.stringify([...opened]));
+  } catch {
+    // The calendar remains usable if browser storage is unavailable.
+  }
+  byId('finale').hidden = opened.size < 24;
+}
 
 function show(section) {
   for (const id of sections) byId(id).hidden = id !== section;
@@ -39,7 +57,7 @@ const fields = Array.from({ length: 24 }, (_, index) => {
 function updateProgress() {
   const count = fields.filter(field => trackPattern.test(field.value.trim())).length;
   byId('progress').textContent = count + ' of 24 song links ready';
-  byId('create-button').disabled = count !== 24;
+  byId('create-button').disabled = count !== 24 || !byId('calendar-title').value.trim();
 }
 
 byId('start').addEventListener('click', () => {
@@ -48,6 +66,7 @@ byId('start').addEventListener('click', () => {
   fields[0].focus();
 });
 byId('tracks').addEventListener('input', updateProgress);
+byId('calendar-title').addEventListener('input', updateProgress);
 
 byId('create').addEventListener('submit', async event => {
   event.preventDefault();
@@ -62,7 +81,7 @@ byId('create').addEventListener('submit', async event => {
     const { code } = await api('', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tracks: fields.map(field => field.value.trim()) })
+      body: JSON.stringify({ title: byId('calendar-title').value.trim(), tracks: fields.map(field => field.value.trim()) })
     });
     const url = new URL(location.pathname, location.origin);
     url.searchParams.set('code', code);
@@ -92,7 +111,10 @@ byId('join').addEventListener('submit', event => {
   if (codePattern.test(code)) join(code);
 });
 
-function renderCalendar({ code, year, available }) {
+function renderCalendar({ code, title, year, available }) {
+  byId('calendar-heading').textContent = title;
+  byId('finale').hidden = available < 24 || openedDoors(code).size < 24;
+  byId('save-playlist').onclick = () => connectSpotify(code, byId('playlist-status'));
   byId('calendar-info').textContent = year + ' · Doors unlock at midnight London time.';
   const doors = Array.from({ length: 24 }, (_, index) => {
     const day = index + 1;
@@ -158,6 +180,7 @@ async function openDoor(code, day) {
   try {
     const track = await api('/' + code + '/doors/' + day, { signal: request.signal });
     if (request.signal.aborted) return;
+    rememberDoor(code, day);
     link.href = track.url;
     byId('song').textContent = track.title || '';
     if (track.cover) {
@@ -173,7 +196,8 @@ async function openDoor(code, day) {
 }
 
 dialog.addEventListener('close', () => doorRequest?.abort());
-const initialCode = new URLSearchParams(location.search).get('code')?.toUpperCase();
+const oauthCode = await finishSpotify(api, byId('playlist-status'));
+const initialCode = oauthCode || new URLSearchParams(location.search).get('code')?.toUpperCase();
 if (initialCode && codePattern.test(initialCode)) {
   byId('code').value = initialCode;
   join(initialCode);

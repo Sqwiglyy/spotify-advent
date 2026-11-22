@@ -20,3 +20,15 @@ input{min-width:0;width:100%;padding:.65rem .7rem;border:1px solid #697571;backg
 dialog{width:min(460px,calc(100% - 2rem));padding:1.25rem;color:inherit;background:#1b2423;border:1px solid var(--line);border-radius:14px}dialog::backdrop{background:#050907d9}
 #track-link{display:grid;gap:.7rem;margin-top:1rem;text-decoration:none}#art{width:100%;height:auto;border-radius:6px}#song{font-size:1.25rem;color:#f6efdc}.spotify{text-decoration:underline}
 @media(max-width:560px){.choices,#tracks{grid-template-columns:1fr}#doors{grid-template-columns:repeat(4,minmax(0,1fr));gap:.45rem}.door strong{font-size:1.65rem}}
+
+
+@font-face{font-family:Aseprite;src:url("./fonts/Aseprite-Regular.woff2") format("woff2");font-weight:100 1000;font-display:swap}
+:root{font-family:Aseprite,monospace;font-size:20px}
+h1,h2{font-family:Aseprite,monospace;letter-spacing:0;font-weight:400}
+h1{font-size:clamp(2.5rem,7vw,4.5rem);line-height:1.05}
+h1 em{font-style:normal}
+.door strong{font-family:Aseprite,monospace}
+#calendar-title{margin:.5rem 0 1.5rem}
+#finale{margin-top:2rem}
+#finale p{margin:.8rem 0}
+#saved-playlist{display:block;margin-top:1rem}

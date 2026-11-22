@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#15181b">
-<title>Spotify Advent Calendar</title>
+<title>December Mixtape</title>
 <link rel="stylesheet" href="./style.css">
 <script src="./config.js"></script>
 <script type="module" src="./app.js"></script>
@@ -12,20 +12,20 @@
 <body>
 <main>
 <header>
-<a href="./" class="brand">◈ &nbsp; Spotify Advent Calendar</a>
+<a href="./" class="brand">◈ &nbsp; DECEMBER MIXTAPE</a>
 </header>
 <section id="home">
-<h1>Pick your friends<br><em>24 songs for December.</em></h1>
-<p class="intro">Create a december playlist, send your friends the code, each day opens a new door.</p>
+<h1>Give them<br><em>24 good songs.</em></h1>
+<p class="intro">Make a Spotify advent calendar for a friend. One song opens each day in December.</p>
 <div class="choices">
-<section class="panel"><h2>Create a playlist</h2><p>Pick a song for every door.</p><button id="start">Create a calendar</button></section>
-<form class="panel" id="join"><h2>Open a friend's playlist</h2><label for="code">Six-character share code</label><div class="join-row"><input id="code" maxlength="6" pattern="[A-Za-z0-9]{6}" required placeholder="ABC123" autocapitalize="characters" spellcheck="false"><button>Join</button></div></form>
+<section class="panel"><h2>Make a mixtape</h2><p>Pick a song for every door.</p><button id="start">Create a calendar</button></section>
+<form class="panel" id="join"><h2>Open a mixtape</h2><label for="code">Six-character share code</label><div class="join-row"><input id="code" maxlength="6" pattern="[A-Za-z0-9]{6}" required placeholder="ABC123" autocapitalize="characters" spellcheck="false"><button>Join</button></div></form>
 </div>
 </section>
 <section id="creator" hidden>
 <h1>Make a mixtape.</h1>
 <p class="intro">Paste a Spotify song link for each day from December 1 to 24.</p>
-<form id="create"><div id="tracks"></div><div class="actions"><p id="progress" role="status"></p><button id="create-button" disabled>Create calendar</button></div></form>
+<form id="create"><label for="calendar-title">Calendar and playlist name</label><input id="calendar-title" maxlength="100" required placeholder="Calendar for my Bestie"><div id="tracks"></div><div class="actions"><p id="progress" role="status"></p><button id="create-button" disabled>Create calendar</button></div></form>
 </section>
 <section id="shared" hidden>
 <h1>Your mixtape is ready.</h1>
@@ -34,9 +34,16 @@
 <div class="actions"><button id="copy">Copy share link</button><a id="open-created">Open calendar</a></div>
 </section>
 <section id="calendar" hidden>
-<h1>Your December<br><em>Mixtape.</em></h1>
+<h1 id="calendar-heading">Your December Mixtape</h1>
 <p class="intro" id="calendar-info"></p>
 <div id="doors" aria-label="Calendar doors"></div>
+<section id="finale" class="panel" hidden>
+<h2>24 songs. One gift to keep.</h2>
+<p>Every song your friend picked, together in one playlist.</p>
+<button id="save-playlist">Save all 24 songs to Spotify</button>
+<a id="saved-playlist" target="_blank" rel="noopener" hidden>Open your playlist ↗</a>
+<p id="playlist-status" role="status"></p>
+</section>
 </section>
 <p id="status" role="status"></p>
 </main>
