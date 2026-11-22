@@ -19,5 +19,10 @@
   "vars": {
     "PAGES_ORIGIN": "https://sqwiglyy.github.io",
     "PREVIEW_MODE": "true"
+  },
+  "triggers": {
+    "crons": [
+      "0 */2 * * *"
+    ]
   }
 }
