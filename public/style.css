@@ -1,9 +1,10 @@
-:root{color-scheme:dark;background:#15181b;color:#f6efdc;font:17px Aseprite,monospace;--green:#baf48a;--line:#424847;--muted:#b7bfba}
+@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap");
+:root{color-scheme:dark;background:#15181b;color:#f6efdc;font:17px "Pixelify Sans",monospace;--green:#baf48a;--line:#424847;--muted:#b7bfba}
 *{box-sizing:border-box}[hidden]{display:none!important}
 body{margin:0;background:radial-gradient(ellipse at top right,#263c34,transparent 65%);min-height:100vh}
 main{width:min(960px,calc(100% - 2rem));margin:auto;padding:2rem 0 4rem}header{padding-bottom:2rem;border-bottom:1px solid var(--line)}
 .brand{font-size:.78rem;letter-spacing:.2em;font-weight:700;text-decoration:none}
-h1,h2,p{margin:0}h1{font:normal clamp(3rem,10vw,7rem)/.92 Aseprite,monospace;letter-spacing:-.06em;margin:2.4rem 0 1rem}h1 em{color:var(--green);font-weight:normal}h2{font:normal 1.75rem Aseprite,monospace}
+h1,h2,p{margin:0}h1{font:normal clamp(3rem,10vw,7rem)/.92 "Pixelify Sans",monospace;letter-spacing:-.06em;margin:2.4rem 0 1rem}h1 em{color:var(--green);font-weight:normal}h2{font:normal 1.75rem "Pixelify Sans",monospace}
 .intro{color:var(--muted);margin-bottom:2rem;max-width:45ch}
 a{color:var(--green)}button,input{font:inherit}button{cursor:pointer;border:0;border-radius:7px;padding:.7rem 1rem;background:var(--green);color:#172019;font-weight:650}button:disabled{cursor:default;opacity:.52}
 button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid #fff;outline-offset:3px}
@@ -14,24 +15,26 @@ input{min-width:0;width:100%;padding:.65rem .7rem;border:1px solid #697571;backg
 #code{text-transform:uppercase}#tracks input{margin-top:.35rem}#tracks label{color:var(--muted)}
 #doors{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.7rem}
 .door{display:grid;place-content:center;gap:.2rem;aspect-ratio:1.18;background:#cae6a4;color:#172019}.door:nth-child(3n){background:#f0c4a7}.door:nth-child(4n){background:#b7c7f6}
-.door strong{font:2rem Aseprite,monospace}.door small{font-size:.68rem}
-.share-code{font:clamp(2rem,8vw,4rem) Aseprite,monospace;letter-spacing:.14em;color:var(--green)}
+.door strong{font:2rem "Pixelify Sans",monospace}.door small{font-size:.68rem}
+.share-code{font:clamp(2rem,8vw,4rem) "Pixelify Sans",monospace;letter-spacing:.14em;color:var(--green)}
 #status,#track-status{margin-top:.9rem;color:#f0c4a7}#status:empty,#track-status:empty{display:none}
 dialog{width:min(460px,calc(100% - 2rem));padding:1.25rem;color:inherit;background:#1b2423;border:1px solid var(--line);border-radius:14px}dialog::backdrop{background:#050907d9}
 #track-link{display:grid;gap:.7rem;margin-top:1rem;text-decoration:none}#art{width:100%;height:auto;border-radius:6px}#song{font-size:1.25rem;color:#f6efdc}.spotify{text-decoration:underline}
 @media(max-width:560px){.choices,#tracks{grid-template-columns:1fr}#doors{grid-template-columns:repeat(4,minmax(0,1fr));gap:.45rem}.door strong{font-size:1.65rem}}
 
 
-@font-face{font-family:Aseprite;src:url("./fonts/Aseprite-Regular.woff2") format("woff2");font-weight:100 1000;font-display:swap}
-:root{font-family:Aseprite,monospace;font-size:20px}
-h1,h2{font-family:Aseprite,monospace;letter-spacing:0;font-weight:400}
+
+:root{font-family:"Pixelify Sans",monospace;font-size:20px}
+h1,h2{font-family:"Pixelify Sans",monospace;letter-spacing:0;font-weight:400}
 h1{font-size:clamp(2.5rem,7vw,4.5rem);line-height:1.05}
 h1 em{font-style:normal}
-.door strong{font-family:Aseprite,monospace}
+.door strong{font-family:"Pixelify Sans",monospace}
 #calendar-title{margin:.5rem 0 1.5rem}
 #finale{margin-top:2rem}
 #finale p{margin:.8rem 0}
 #saved-playlist{display:block;margin-top:1rem}
 body, button, input, textarea, select, option, dialog, a, label, small, strong {
-  font-family: Aseprite, monospace;
+  font-family: "Pixelify Sans", monospace;
 }
+h1,h2,.door strong{font-weight:500}
+button{font-weight:600}
