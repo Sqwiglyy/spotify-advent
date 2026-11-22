@@ -92,8 +92,11 @@ async function spotifyDetails(url) {
     const response = await fetch(api, { signal: AbortSignal.timeout(4500) });
     if (!response.ok) return {};
     const data = await response.json();
-    const cover = typeof data.thumbnail_url === 'string' && /^https:\/\/(?:i|image-cdn-ak)\.scdn\.co\//.test(data.thumbnail_url)
-      ? data.thumbnail_url : null;
+    let cover = null;
+    if (typeof data.thumbnail_url === 'string') {
+      const image = new URL(data.thumbnail_url);
+      if (image.protocol === 'https:' && (image.hostname.endsWith('.scdn.co') || image.hostname.endsWith('.spotifycdn.com'))) cover = image.href;
+    }
     return { title: typeof data.title === 'string' ? data.title : null, cover };
   } catch {
     return {};
@@ -141,7 +144,7 @@ async function route(request, env, path) {
         if (available < 24) return error('Your full playlist unlocks on December 24.', 403);
         return json({ title: row.title, tracks: JSON.parse(row.tracks) });
       }
-      if (!door) return json({ code, title: row.title, year: row.year, available });
+      if (!door) return json({ code, title: row.title, year: row.year, available, preview: env.PREVIEW_MODE === 'true' });
       if (Number(door) > available) return error('This door is still locked.', 403);
       const url = JSON.parse(row.tracks)[Number(door) - 1];
       return json({ url, ...(await spotifyDetails(url)) });
