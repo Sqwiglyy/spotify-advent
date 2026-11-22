@@ -7,21 +7,22 @@
 <title>Spotify Calendar</title>
 <link rel="stylesheet" href="./style.css">
 <script src="./config.js?v=spotify-setup-1"></script>
-<script type="module" src="./app.js"></script>
+<script type="module" src="./app.js?v=navigation-1"></script>
 </head>
 <body>
 <main>
 <header>
-<a href="./" class="brand">◈ &nbsp; DECEMBER MIXTAPE</a>
+<nav aria-label="Main navigation" style="display:flex;gap:.65rem;flex-wrap:wrap"><button id="nav-home" type="button">Home</button><button id="nav-create" type="button">Create</button><button id="nav-view" type="button">View</button></nav>
 </header>
 <section id="home">
 <h1>Give them<br><em>24 songs for December</em></h1>
 <p class="intro">Make a Spotify advent calendar for a friend. One song opens each day in December.</p>
 <div class="choices">
 <section class="panel"><h2>Make a mixtape</h2><p>Pick a song for every door.</p><button id="start">Create a calendar</button></section>
-<form class="panel" id="join"><h2>Open a mixtape</h2><label for="code">Six-character share code</label><div class="join-row"><input id="code" maxlength="6" pattern="[A-Za-z0-9]{6}" required placeholder="ABC123" autocapitalize="characters" spellcheck="false"><button>Join</button></div></form>
+
 </div>
 </section>
+<section id="view" hidden><h1>Open a calendar.</h1><p class="intro">Enter the six-character code your friend shared with you.</p><form class="panel" id="join"><h2>Open a mixtape</h2><label for="code">Six-character share code</label><div class="join-row"><input id="code" maxlength="6" pattern="[A-Za-z0-9]{6}" required placeholder="ABC123" autocapitalize="characters" spellcheck="false"><button>Join</button></div></form></section>
 <section id="creator" hidden>
 <h1>Make a mixtape.</h1>
 <p class="intro">Paste a Spotify song link for each day from December 1 to 24.</p>
