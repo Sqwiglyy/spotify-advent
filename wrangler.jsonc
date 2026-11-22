@@ -17,6 +17,7 @@
     }
   ],
   "vars": {
-    "PAGES_ORIGIN": "https://sqwiglyy.github.io"
+    "PAGES_ORIGIN": "https://sqwiglyy.github.io",
+    "PREVIEW_MODE": "true"
   }
 }
