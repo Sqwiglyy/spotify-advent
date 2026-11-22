@@ -134,7 +134,9 @@ async function route(request, env, path) {
         ? 'SELECT year, tracks, title FROM calendars WHERE code = ?'
         : 'SELECT year, title FROM calendars WHERE code = ?').bind(code).first();
       if (!row) return error('Calendar code not found.', 404);
-      const available = availableThrough(row.year, now);
+      const available = env.PREVIEW_MODE === 'true'
+        ? 24
+        : availableThrough(row.year, now);
       if (finale) {
         if (available < 24) return error('Your full playlist unlocks on December 24.', 403);
         return json({ title: row.title, tracks: JSON.parse(row.tracks) });
