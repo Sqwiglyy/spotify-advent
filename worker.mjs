@@ -68,6 +68,8 @@ async function create(request, db, now) {
   if (!Array.isArray(payload?.tracks) || payload.tracks.length !== 24) {
     return error('Fill all 24 doors with Spotify track links.', 400);
   }
+  const title = typeof payload.title === 'string' ? payload.title.trim() : '';
+  if (!title || title.length > 100) return error('Give your calendar a name of 1–100 characters.', 400);
   const tracks = payload.tracks.map(canonicalTrack);
   const invalid = tracks.indexOf(null);
   if (invalid !== -1) return error('Door ' + (invalid + 1) + ' needs a Spotify song link.', 400);
@@ -76,8 +78,8 @@ async function create(request, db, now) {
   const year = date.year + Number(date.month === 12 && date.day > 24);
   for (let attempt = 0; attempt < 5; attempt++) {
     const code = shareCode();
-    const result = await db.prepare('INSERT INTO calendars (code, year, tracks) VALUES (?, ?, ?) ON CONFLICT(code) DO NOTHING')
-      .bind(code, year, JSON.stringify(tracks)).run();
+    const result = await db.prepare('INSERT INTO calendars (code, year, tracks, title) VALUES (?, ?, ?, ?) ON CONFLICT(code) DO NOTHING')
+      .bind(code, year, JSON.stringify(tracks), title).run();
     if (result.meta.changes === 1) return json({ code, year }, 201);
   }
   return error('Could not assign a code. Try again.', 503);
@@ -125,15 +127,19 @@ async function route(request, env, path) {
     const now = new Date();
     try {
       if (request.method === 'POST' && path === '/api/calendars') return await create(request, env.DB, now);
-      const match = /^\/api\/calendars\/([A-Z0-9]{6})(?:\/doors\/([1-9]|1[0-9]|2[0-4]))?$/.exec(path);
+      const match = /^\/api\/calendars\/([A-Z0-9]{6})(?:\/(?:doors\/([1-9]|1[0-9]|2[0-4])|(finale)))?$/.exec(path);
       if (!match || request.method !== 'GET') return error('Page not found.', 404);
-      const [, code, door] = match;
-      const row = await env.DB.prepare(door
-        ? 'SELECT year, tracks FROM calendars WHERE code = ?'
-        : 'SELECT year FROM calendars WHERE code = ?').bind(code).first();
+      const [, code, door, finale] = match;
+      const row = await env.DB.prepare((door || finale)
+        ? 'SELECT year, tracks, title FROM calendars WHERE code = ?'
+        : 'SELECT year, title FROM calendars WHERE code = ?').bind(code).first();
       if (!row) return error('Calendar code not found.', 404);
       const available = availableThrough(row.year, now);
-      if (!door) return json({ code, year: row.year, available });
+      if (finale) {
+        if (available < 24) return error('Your full playlist unlocks on December 24.', 403);
+        return json({ title: row.title, tracks: JSON.parse(row.tracks) });
+      }
+      if (!door) return json({ code, title: row.title, year: row.year, available });
       if (Number(door) > available) return error('This door is still locked.', 403);
       const url = JSON.parse(row.tracks)[Number(door) - 1];
       return json({ url, ...(await spotifyDetails(url)) });
