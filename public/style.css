@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Pixelify+Sans:wght@400;500;600;700&display=swap");
 :root{color-scheme:dark;background:#15181b;color:#f6efdc;font:17px "Pixelify Sans",monospace;--green:#baf48a;--line:#424847;--muted:#b7bfba}
 *{box-sizing:border-box}[hidden]{display:none!important}
 body{margin:0;background:radial-gradient(ellipse at top right,#263c34,transparent 65%);min-height:100vh}
@@ -38,3 +38,7 @@ body, button, input, textarea, select, option, dialog, a, label, small, strong {
 }
 h1,h2,.door strong{font-weight:500}
 button{font-weight:600}
+h1,h2,#song{font-family:"DM Sans",sans-serif;font-weight:500;letter-spacing:-.025em}
+h1{font-size:clamp(2.2rem,5.5vw,3.5rem);line-height:1.12}
+h2{font-size:1.5rem;line-height:1.25}
+h1 em{font-family:inherit;font-style:normal}
