@@ -5,7 +5,7 @@ const workerUrl = window.MIXTAPE_WORKER_URL || '';
 const dialog = document.querySelector('dialog');
 const codePattern = /^[A-Z0-9]{6}$/;
 const trackPattern = /^https:\/\/open\.spotify\.com\/(?:intl-[a-z-]+\/)?track\/[A-Za-z0-9]{22}\/?(?:[?#].*)?$/;
-const sections = ['home', 'creator', 'shared', 'calendar'];
+const sections = ['home', 'creator', 'shared', 'calendar', 'view'];
 let doorRequest;
 let refreshTimer;
 function openedDoors(code) {
@@ -27,6 +27,17 @@ function rememberDoor(code, day) {
 }
 
 function show(section) {
+  clearInterval(refreshTimer);
+  const route = new URL(location.href);
+  if (section !== 'calendar') {
+    route.searchParams.delete('code');
+    history.replaceState(null, '', route);
+  }
+  for (const [id, target] of [['nav-home', 'home'], ['nav-create', 'creator'], ['nav-view', 'view']]) {
+    const button = byId(id);
+    if (section === target || (target === 'view' && section === 'calendar')) button.setAttribute('aria-current', 'page');
+    else button.removeAttribute('aria-current');
+  }
   for (const id of sections) byId(id).hidden = id !== section;
   status.textContent = '';
 }
@@ -64,6 +75,12 @@ byId('start').addEventListener('click', () => {
   show('creator');
   updateProgress();
   fields[0].focus();
+});
+byId('nav-home').addEventListener('click', () => show('home'));
+byId('nav-create').addEventListener('click', () => byId('start').click());
+byId('nav-view').addEventListener('click', () => {
+  show('view');
+  byId('code').focus();
 });
 byId('tracks').addEventListener('input', updateProgress);
 byId('calendar-title').addEventListener('input', updateProgress);
