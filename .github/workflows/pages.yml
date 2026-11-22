@@ -24,6 +24,7 @@ jobs:
       - uses: actions/configure-pages@v5
       - name: Connect the Worker
         env:
+          SPOTIFY_CLIENT_ID: ${{ vars.SPOTIFY_CLIENT_ID }}
           WORKER_URL: ${{ vars.WORKER_URL }}
         run: |
           node <<'JS'
@@ -32,7 +33,7 @@ jobs:
           if (url.protocol !== 'https:' || url.pathname !== '/' || url.search || url.hash || url.username || url.password) {
             throw new Error('Set WORKER_URL to the HTTPS origin of your deployed Worker.');
           }
-          fs.writeFileSync('public/config.js', 'window.MIXTAPE_WORKER_URL = ' + JSON.stringify(url.origin) + ';\n');
+          fs.writeFileSync('public/config.js', 'window.MIXTAPE_WORKER_URL = ' + JSON.stringify(url.origin) + ';\nwindow.MIXTAPE_SPOTIFY_CLIENT_ID = ' + JSON.stringify(process.env.SPOTIFY_CLIENT_ID || '') + ';\n');
           JS
       - uses: actions/upload-pages-artifact@v4
         with:
